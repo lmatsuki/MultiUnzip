@@ -9,8 +9,8 @@
     <DockPanel>
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
-                <Button Content="Unzip" Click="UnzipButton_Click" Width="50" />
-                <Button Content="Clear All" Click="ClearAllButton_Click" Width="50" />
+                <Button Name="unzipButton" Content="Unzip" Click="UnzipButton_Click" Width="50" />
+                <Button Name="clearAllButton" Content="Clear All" Click="ClearAllButton_Click" Width="50" />
             </ToolBar>
         </ToolBarTray>
         <Label DockPanel.Dock="Bottom" Content="Drag and drop files above and click Unzip!" />

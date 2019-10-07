@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.IO.Compression;
 using System.Windows;
@@ -14,6 +15,7 @@ namespace MultiUnzip
     public partial class MainWindow : Window
     {
         private ObservableCollection<FileToUnzip> fileToUnzipCollection;
+        ProgressBarWindow progressBarWindow = null;
 
         public MainWindow()
         {
@@ -79,13 +81,64 @@ namespace MultiUnzip
 
             if (result == WinForms.DialogResult.OK)
             {
-                foreach (FileToUnzip file in fileToUnzipCollection)
+                try
                 {
-                    ZipFile.ExtractToDirectory(file.FilePath, unzipDirectorySelectionDialog.SelectedPath);
-                }
+                    BackgroundWorker worker = new BackgroundWorker();
+                    worker.WorkerReportsProgress = true;
+                    worker.DoWork += Worker_DoWork;
+                    worker.ProgressChanged += Worker_ProgressChanged;
 
-                MessageBox.Show("Unzipping complete!");
+                    worker.RunWorkerAsync(argument: unzipDirectorySelectionDialog.SelectedPath);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error");
+                }
             }
+        }
+
+        private void Worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            string selectedPath = e.Argument as string;
+
+            if (string.IsNullOrEmpty(selectedPath))
+            {
+                MessageBox.Show("Unexpected error with selected directory.");
+
+                return;
+            }
+
+            Dispatcher.Invoke(() =>
+            {
+                unzipButton.IsEnabled = false;
+                clearAllButton.IsEnabled = false;
+
+                progressBarWindow = new ProgressBarWindow();
+                progressBarWindow.Show();
+            });
+
+            float progress = 0f;
+            foreach (FileToUnzip file in fileToUnzipCollection)
+            {
+                ZipFile.ExtractToDirectory(file.FilePath, selectedPath);
+                progress++;
+
+                int progressPercentage = (int)(progress / fileToUnzipCollection.Count * 100);
+                (sender as BackgroundWorker).ReportProgress(progressPercentage);
+            }
+
+            Dispatcher.Invoke(() =>
+            {
+                unzipButton.IsEnabled = true;
+                clearAllButton.IsEnabled = true;
+            });
+
+            MessageBox.Show("Unzipping complete!");
+        }
+
+        private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            progressBarWindow.UpdateProgress(e.ProgressPercentage);
         }
     }
 
