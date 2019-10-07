@@ -5,13 +5,9 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
+    <PublishSingleFile>true</PublishSingleFile>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Contents\delete.png" />
-    <None Remove="Contents\mail_delete.png" />
-    <None Remove="Contents\ZipFile_16x.png" />
-  </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Contents\delete.png">
@@ -21,5 +17,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
-
 </Project>
