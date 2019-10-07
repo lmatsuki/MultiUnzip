@@ -5,16 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MultiUnzip"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <DockPanel>
+        Title="Multi-Unzip" Height="400" Width="500">
+    <DockPanel Background="#FFEEF5FD">
         <ToolBarTray DockPanel.Dock="Top">
-            <ToolBar>
-                <Button Name="unzipButton" Content="Unzip" Click="UnzipButton_Click" Width="50" />
-                <Button Name="clearAllButton" Content="Clear All" Click="ClearAllButton_Click" Width="50" />
+            <ToolBar ToolBarTray.IsLocked="True" >
+                <Button Name="unzipButton" Click="UnzipButton_Click" Width="70">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Contents/ZipFile_16x.png" Margin="0 0 5 0" />
+                        <TextBlock>Unzip</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Separator />
+                <Button Name="clearAllButton" Click="ClearAllButton_Click" Width="70">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Contents/delete.png" Margin="0 0 5 0" />
+                        <TextBlock>Clear All</TextBlock>
+                    </StackPanel>
+                </Button>
             </ToolBar>
         </ToolBarTray>
         <Label DockPanel.Dock="Bottom" Content="Drag and drop files above and click Unzip!" />
-        <ListBox Name="filesToUnzip" AllowDrop="True" DisplayMemberPath="FileName" DragDrop.Drop="UnzipFiles_Drop" Margin="5">
+        <ListBox Name="filesToUnzip" AllowDrop="True" DisplayMemberPath="FileName" DragDrop.Drop="UnzipFiles_Drop" Margin="5 0 5 0">
             
         </ListBox>
     </DockPanel>

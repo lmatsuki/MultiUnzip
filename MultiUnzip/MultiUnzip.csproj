@@ -7,4 +7,19 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Contents\delete.png" />
+    <None Remove="Contents\mail_delete.png" />
+    <None Remove="Contents\ZipFile_16x.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Contents\delete.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Contents\ZipFile_16x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
 </Project>
