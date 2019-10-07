@@ -70,10 +70,10 @@ namespace MultiUnzip
                 return;
             }
 
-            UnzipAllFiles();
+            StartFileUnzip();
         }
 
-        private void UnzipAllFiles()
+        private void StartFileUnzip()
         {
             WinForms.FolderBrowserDialog unzipDirectorySelectionDialog = new WinForms.FolderBrowserDialog();
             unzipDirectorySelectionDialog.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -117,15 +117,7 @@ namespace MultiUnzip
                 progressBarWindow.Show();
             });
 
-            float progress = 0f;
-            foreach (FileToUnzip file in fileToUnzipCollection)
-            {
-                ZipFile.ExtractToDirectory(file.FilePath, selectedPath);
-                progress++;
-
-                int progressPercentage = (int)(progress / fileToUnzipCollection.Count * 100);
-                (sender as BackgroundWorker).ReportProgress(progressPercentage);
-            }
+            UnzipFiles(sender, selectedPath);
 
             Dispatcher.Invoke(() =>
             {
@@ -134,6 +126,26 @@ namespace MultiUnzip
             });
 
             MessageBox.Show("Unzipping complete!");
+        }
+
+        private void UnzipFiles(object sender, string selectedPath)
+        {
+            float progress = 0f;
+            foreach (FileToUnzip file in fileToUnzipCollection)
+            {
+                try
+                {
+                    ZipFile.ExtractToDirectory(file.FilePath, selectedPath);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error unzipping file {file.FileName}: {ex.Message}");
+                }
+
+                progress++;
+                int progressPercentage = (int)(progress / fileToUnzipCollection.Count * 100);
+                (sender as BackgroundWorker).ReportProgress(progressPercentage);
+            }
         }
 
         private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
